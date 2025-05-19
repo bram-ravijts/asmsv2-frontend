@@ -1,0 +1,51 @@
+<form *ngIf="question && questionForm" [formGroup]="questionForm" (ngSubmit)="onSubmit()" class="question-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ question.text }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div [ngSwitch]="question.answerType">
+        
+        <!-- Radio Button Answers -->
+        <div *ngSwitchCase="'radio'" class="options-container">
+          <mat-radio-group formControlName="selectedOption" aria-label="Select an option">
+            <mat-radio-button *ngFor="let option of question.options" [value]="option.value" class="option-item">
+              {{ option.label }}
+            </mat-radio-button>
+          </mat-radio-group>
+          <mat-error *ngIf="questionForm.get('selectedOption')?.invalid && (questionForm.get('selectedOption')?.touched || questionForm.get('selectedOption')?.dirty || (questionForm.invalid && questionForm.touched))">
+            Please select an answer.
+          </mat-error>
+        </div>
+
+        <!-- Checkbox Answers -->
+        <div *ngSwitchCase="'checkbox'" formArrayName="selectedOptions" class="options-container">
+          <div *ngFor="let option of question.options; let i = index" class="option-item">
+            <mat-checkbox [formControlName]="i">{{ option.label }}</mat-checkbox>
+          </div>
+          <mat-error *ngIf="selectedOptionsArray.invalid && (selectedOptionsArray.touched || selectedOptionsArray.dirty || (questionForm.invalid && questionForm.touched))">
+             <span *ngIf="selectedOptionsArray.hasError('required') || selectedOptionsArray.hasError('minlength')">Please select at least one answer.</span>
+          </mat-error>
+        </div>
+
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-raised-button color="primary" type="submit" (click)="onButtonClick()">
+        Submit Answer
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- General form error for debugging or unhandled cases -->
+  <div *ngIf="questionForm.invalid && questionForm.touched && !questionForm.pending" class="form-submission-error">
+    <p *ngIf="questionForm.hasError('required', 'selectedOption')">A selection is required for radio button questions.</p>
+    <p *ngIf="selectedOptionsArray?.hasError('required') || selectedOptionsArray?.hasError('minlength')">At least one checkbox must be selected.</p>
+  </div>
+
+</form>
+
+<!-- Fallback content if question is not loaded -->
+<div *ngIf="!question">
+  <p>Loading question...</p>
+</div>

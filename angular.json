@@ -32,8 +32,14 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles/main.scss",
+              "src/styles/themes/pwc-orange-tokens.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles/**/*"
+              ]
+            },
             "scripts": []
           },
           "configurations": {
@@ -91,12 +97,15 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles/main.scss"
             ],
             "scripts": []
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

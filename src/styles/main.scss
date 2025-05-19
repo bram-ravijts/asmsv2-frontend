@@ -1,0 +1,30 @@
+@use '@angular/material' as mat;
+@use 'abstracts/modern-normalize.min.css';
+@use 'abstracts/pwc-styles' as *;
+@use 'themes/pwc-orange-theme-colors' as theme-colors;
+@use 'themes/pwc-orange-tokens' as theme-tokens;
+
+html {
+    @include mat.theme(
+      (
+        color: (
+          theme-type: light,
+          primary: theme-colors.$primary-palette,
+          tertiary: theme-colors.$tertiary-palette,
+        ),
+        typography: $pwc-text,
+        density: 0,
+      )
+    );
+  }
+
+body {
+    background: $pwc-background-underlay;
+}
+
+.container{
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: $pwc-background-main;
+}

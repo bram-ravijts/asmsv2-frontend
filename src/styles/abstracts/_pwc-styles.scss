@@ -1,0 +1,69 @@
+/* You can add global styles to this file, and also import other style files */
+///* VARIABLES *///
+
+//* PWC COLORS *///
+/* PRIMARY COLORS */
+$pwc-orange: #D04A02;
+$pwc-yellow: #FFB600;
+$pwc-red: #E0301E;
+$pwc-tangerine: #EB8C00;
+$pwc-rose: #DB536A;
+
+/* ORANGE SHADES */
+$pwc-orange-light: #FD6412;
+$pwc-orange-lighter: #FEB791;
+$pwc-orange-dark: #933401;
+$pwc-orange-darker: #571F01;
+
+/* YELLOW SHADES */
+$pwc-yellow-light: #FFC83D;
+$pwc-yellow-lighter: #FFECBD;
+$pwc-yellow-dark: #C28A00;
+$pwc-yellow-darker: #855F00;
+
+/* RED SHADES */
+$pwc-red-light: #E86153;
+$pwc-red-lighter: #F7C8C4;
+$pwc-red-dark: #AA2417;
+$pwc-red-darker: #741910;
+
+/* TANGERINE SHADES */
+$pwc-tangerine-light: #FFA929;
+$pwc-tangerine-lighter: #FFDCA9;
+$pwc-tangerine-dark: #AE6800;
+$pwc-tangerine-darker: #714300;
+
+/* ROSE SHADES */
+$pwc-rose-light: #E27588;
+$pwc-rose-lighter: #F1BAC3;
+$pwc-rose-dark: #A43E50;
+$pwc-rose-darker: #6E2A35;
+
+/* STATUS COLORS */
+$pwc-status-green: #175D2D; // Green
+$pwc-status-red: #E0301E; // Red
+$pwc-status-yellow: #E1B600; // Yellow
+
+/* PWC BLACK AND GRAYS */
+$pwc-black: #000000;
+$pwc-gray: #7D7D7D;
+$pwc-gray-light: #DEDEDE;
+$pwc-gray-medium: #464646;
+$pwc-gray-dark: #2D2D2D;
+
+/* PWC BACKGROUND COLORS */
+$pwc-background-underlay: #000000DD; // Black with 87% opacity => USE UNDER BODY CARD
+$pwc-background-main: #FFFFFF; // White => USE FOR BODY CARD
+
+
+//* PWC TYPOGRAPHY *//
+$pwc-header: 'Georgia Regular, sans-serif';
+$pwc-sub-header: 'Arial Bold, sans-serif';
+$pwc-text: 'Arial Regular, sans-serif';
+
+
+//* PWC FONT SIZES *//
+$pwc-font-size-title: 40px;
+$pwc-font-size-header: 30px;
+$pwc-font-size-sub-header: 20px;
+$pwc-font-size-base: 15px;

@@ -1,0 +1,131 @@
+// Import PWC styles - Adjust path as necessary if this component moves
+@import '../../styles/abstracts/pwc-styles';
+
+.question-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 15px;
+
+  mat-card {
+    background-color: $pwc-background-main;
+    // Add a subtle box-shadow if desired, consistent with PWC theme if specified
+    // box-shadow: 0 2px 4px rgba($pwc-black, 0.1);
+  }
+
+  mat-card-header {
+    padding-bottom: 10px; // Add some space below the title
+  }
+
+  mat-card-title {
+    font-family: $pwc-header;
+    font-size: $pwc-font-size-sub-header; // Or $pwc-font-size-header if more prominence is needed
+    color: $pwc-gray-dark;
+    line-height: 1.4;
+    margin-bottom: 15px; // Space between title and content
+  }
+
+  .options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; // Space between options
+    margin-top: 10px;
+    margin-bottom: 15px;
+  }
+
+  .option-item {
+    display: block; // Ensures radio/checkboxes take full width for easier clicking if needed
+    margin-bottom: 8px;
+    font-family: $pwc-text;
+    font-size: $pwc-font-size-base;
+    color: $pwc-gray-medium; // Or $pwc-gray-dark for stronger contrast
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    // Styling for the label text within Angular Material components
+    // May need ::ng-deep if styles don't penetrate easily
+    .mdc-form-field, .mat-mdc-radio-label, .mat-mdc-checkbox-label { // Target new MDC classes
+      font-family: $pwc-text; // Ensure PWC font is applied to the label part
+      font-size: $pwc-font-size-base;
+      color: $pwc-gray-medium;
+    }
+  }
+
+  mat-radio-group.mat-mdc-radio-group, // Target Angular Material 15+ classes
+  div[formArrayName="selectedOptions"] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Ensure material radio buttons and checkboxes align well
+  // These might need adjustment based on specific Angular Material version and global styles
+  ::ng-deep .mat-mdc-radio-button .mdc-form-field {
+    align-items: center;
+    .mdc-label {
+      font-family: $pwc-text;
+      font-size: $pwc-font-size-base;
+      color: $pwc-gray-dark; // Using a slightly darker gray for better readability
+    }
+  }
+
+  ::ng-deep .mat-mdc-checkbox .mdc-form-field {
+    align-items: center;
+    .mdc-label {
+      font-family: $pwc-text;
+      font-size: $pwc-font-size-base;
+      color: $pwc-gray-dark;
+    }
+  }
+
+  mat-card-actions {
+    padding-top: 10px; // Space above the submit button
+    justify-content: flex-end; // Align button to the right
+  }
+
+  button[mat-raised-button] {
+    min-width: 120px; 
+    font-family: $pwc-text;
+    font-size: $pwc-font-size-base;
+    // Example: Using PWC orange for primary button if not themed by Angular Material's primary
+    // background-color: $pwc-orange;
+    // color: $pwc-background-main; 
+    // &:hover {
+    //   background-color: $pwc-orange-dark;
+    // }
+  }
+
+  mat-error {
+    font-family: $pwc-text;
+    font-size: $pwc-font-size-base * 0.9; // Slightly smaller than base
+    color: $pwc-status-red;
+    margin-top: 5px;
+  }
+
+  .form-submission-error {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: $pwc-red-lighter; // Using a lighter PWC red for background
+    color: $pwc-status-red; // PWC status red for text
+    border: 1px solid $pwc-red; // PWC red for border
+    border-radius: 4px;
+    font-family: $pwc-text;
+    font-size: $pwc-font-size-base * 0.9;
+
+    p {
+      margin: 0 0 5px 0;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+// Fallback content styling
+.loading-question {
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+  color: $pwc-gray-medium;
+  font-family: $pwc-text;
+}
