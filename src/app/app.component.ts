@@ -24,31 +24,31 @@ export class AppComponent {
   title = 'front-end';
 
   // Sample question data
-  // currentQuestion: Question = {
-  //   id: 'q1',
-  //   text: 'What is your favorite color?',
-  //   answerType: 'radio',
-  //   options: [
-  //     { value: 'red', label: 'Red' },
-  //     { value: 'blue', label: 'Blue' },
-  //     { value: 'green', label: 'Green' }
-  //   ],
-  //   required: true
-  // };
-
-  // Sample question data for checkboxes
   currentQuestion: Question = {
-    id: 'q2',
-    text: 'Which of these anmials are mammals? (Select all that apply)',
-    answerType: 'checkbox',
+    id: 'q1',
+    text: 'What is your favorite color?',
+    answerType: 'radio',
     options: [
-      { value: 'dog', label: 'Dog' },
-      { value: 'shark', label: 'Shark' },
-      { value: 'cat', label: 'Cat' },
-      { value: 'eagle', label: 'Eagle' }
+      { value: 'red', label: 'Red' },
+      { value: 'blue', label: 'Blue' },
+      { value: 'green', label: 'Green' }
     ],
     required: true
   };
+
+  // Sample question data for checkboxes
+  // currentQuestion: Question = {
+  //   id: 'q2',
+  //   text: 'Which of these anmials are mammals? (Select all that apply)',
+  //   answerType: 'checkbox',
+  //   options: [
+  //     { value: 'dog', label: 'Dog' },
+  //     { value: 'shark', label: 'Shark' },
+  //     { value: 'cat', label: 'Cat' },
+  //     { value: 'eagle', label: 'Eagle' }
+  //   ],
+  //   required: true
+  // };
 
   handleAnswer(submission: { questionId: string, selectedAnswers: string[] }): void {
     const questionText = this.currentQuestion.text; // Or fetch question by ID if managing multiple
