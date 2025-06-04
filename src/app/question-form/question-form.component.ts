@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms'; // Correctly import ReactiveFormsModule
 import { CommonModule } from '@angular/common'; // Import CommonModule
 
@@ -23,6 +23,22 @@ export interface Question {
   required?: boolean; // Optional: to indicate if an answer is mandatory
 }
 
+// Custom validator function
+export function minSelectedCheckboxesValidator(minRequired = 1): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const formArray = control as FormArray;
+    const selectedCount = formArray.controls
+      .map(ctrl => ctrl.value)
+      .reduce((prev, next) => next ? prev + 1 : prev, 0);
+
+    if (formArray.disabled) {
+        return null;
+    }
+    const result = selectedCount >= minRequired ? null : { requiredCheckboxes: true, minRequired };
+    return result;
+  };
+}
+
 @Component({
   selector: 'app-question-form',
   templateUrl: './question-form.component.html',
@@ -38,43 +54,64 @@ export interface Question {
     MatFormFieldModule // Add MatFormFieldModule here for mat-error
   ]
 })
-export class QuestionFormComponent implements OnInit {
+export class QuestionFormComponent implements OnInit, OnChanges {
   @Input() question!: Question;
   @Output() answerSubmit = new EventEmitter<{ questionId: string, selectedAnswers: string[] }>();
-
   questionForm!: FormGroup;
+  showCheckboxError = false;
 
-  constructor(private fb: FormBuilder) { }
-
-  ngOnInit(): void {
-    this.initializeForm();
+  constructor(private fb: FormBuilder) {
   }
 
-  ngOnChanges(): void {
-    // Re-initialize form if question changes
-    if (this.question && this.questionForm) {
+  ngOnInit(): void {
+    // Initialize with a default or empty form structure
+    this.questionForm = this.fb.group({});
+    if (this.question) {
       this.initializeForm();
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['question'] && this.question) {
+      // Ensure this.questionForm is initialized, as ngOnChanges can fire before ngOnInit
+      if (!this.questionForm) {
+        this.questionForm = this.fb.group({});
+      }
+      this.initializeForm();
+    } else if (changes['question']) {
+    }
+  }
+
   private initializeForm(): void {
+    // Ensure questionForm itself is initialized before trying to access its methods
+    if (!this.questionForm) {
+      return; // Or throw an error, as this shouldn't happen with current ngOnInit logic
+    }
+
     if (!this.question) {
       return;
     }
 
-    let formControls: any = {};
-
-    if (this.question.answerType === 'radio') {
-      formControls['selectedOption'] = [null, this.question.required ? Validators.required : null];
-    } else if (this.question.answerType === 'checkbox') {
-      const checkboxArray = this.fb.array(
-        this.question.options.map(() => this.fb.control(false)),
-        this.question.required ? [Validators.required, Validators.minLength(1)] : []
-      );
-      formControls['selectedOptions'] = checkboxArray;
+    // Clear existing controls to avoid conflicts during re-initialization
+    if (this.questionForm.contains('selectedOption')) {
+      this.questionForm.removeControl('selectedOption');
+    }
+    if (this.questionForm.contains('selectedOptions')) {
+      this.questionForm.removeControl('selectedOptions');
     }
 
-    this.questionForm = this.fb.group(formControls);
+    if (this.question.answerType === 'radio') {
+      this.questionForm.addControl('selectedOption', this.fb.control('', this.question.required ? Validators.required : null));
+    } else if (this.question.answerType === 'checkbox') {
+      if (!this.question.options || this.question.options.length === 0) {
+        // Potentially add an empty FormArray or handle as an error state
+      } else {
+        const controls = this.question.options.map(() => this.fb.control(false));
+        // Revert to just our custom validator if it's working
+        this.questionForm.addControl('selectedOptions', this.fb.array(controls, minSelectedCheckboxesValidator(1)));
+      }
+    }
+    this.questionForm.updateValueAndValidity();
   }
 
   get selectedOptionsArray(): FormArray {
@@ -82,10 +119,29 @@ export class QuestionFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('QuestionFormComponent: onSubmit() called. Form valid:', !this.questionForm.invalid, 'Form value:', this.questionForm.value);
+    if (this.questionForm.get('selectedOptions')) {
+      const selectedOptionsCtrl = this.questionForm.get('selectedOptions') as FormArray;
+    }
+
+    // Reset the flags at the beginning of each submission attempt
+    this.showCheckboxError = false;
+
     if (this.questionForm.invalid) {
-      // Mark all fields as touched to display validation errors
-      this.questionForm.markAllAsTouched();
+      this.questionForm.markAllAsTouched(); // Mark all as touched to show other potential errors
+
+      const selectedOptionsArray = this.questionForm.get('selectedOptions') as FormArray;
+      if (selectedOptionsArray && selectedOptionsArray.hasError('requiredCheckboxes')) {
+        this.showCheckboxError = true;
+      } else {
+        // If the form is invalid for reasons other than checkbox selection
+        // No specific action needed here now for generic errors, markAllAsTouched handles visibility for standard errors
+      }
+      // Explicitly mark the FormArray and its controls as touched to ensure standard error styling applies if needed elsewhere
+      if (this.questionForm.get('selectedOptions')) {
+        const selectedOptionsCtrl = this.questionForm.get('selectedOptions') as FormArray;
+        selectedOptionsCtrl.markAsTouched();
+        selectedOptionsCtrl.controls.forEach(control => control.markAsTouched());
+      }
       return;
     }
 
@@ -111,6 +167,5 @@ export class QuestionFormComponent implements OnInit {
 
   // New method for direct button click logging
   onButtonClick(): void {
-    console.log('QuestionFormComponent: Submit Answer button clicked directly.');
   }
 }

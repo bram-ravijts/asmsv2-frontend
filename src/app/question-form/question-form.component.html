@@ -23,8 +23,9 @@
           <div *ngFor="let option of question.options; let i = index" class="option-item">
             <mat-checkbox [formControlName]="i">{{ option.label }}</mat-checkbox>
           </div>
-          <mat-error *ngIf="selectedOptionsArray.invalid && (selectedOptionsArray.touched || selectedOptionsArray.dirty || (questionForm.invalid && questionForm.touched))">
-             <span *ngIf="selectedOptionsArray.hasError('required') || selectedOptionsArray.hasError('minlength')">Please select at least one answer.</span>
+          <!-- Updated error message logic to depend on submission attempt -->
+          <mat-error *ngIf="showCheckboxError">
+             Please select at least one answer.
           </mat-error>
         </div>
 
@@ -36,12 +37,6 @@
       </button>
     </mat-card-actions>
   </mat-card>
-
-  <!-- General form error for debugging or unhandled cases -->
-  <div *ngIf="questionForm.invalid && questionForm.touched && !questionForm.pending" class="form-submission-error">
-    <p *ngIf="questionForm.hasError('required', 'selectedOption')">A selection is required for radio button questions.</p>
-    <p *ngIf="selectedOptionsArray?.hasError('required') || selectedOptionsArray?.hasError('minlength')">At least one checkbox must be selected.</p>
-  </div>
 
 </form>
 
